@@ -10,26 +10,11 @@ app.use(renderer)
 app.use(ViewRenderer)
 
 app.get('/', (c) => {
-    return c.view('hello', {
+    return c.view('landing', {
         meta: {
-            title: 'Hello World',
+            title: 'Oscar Sims',
         },
-        props: {
-            message: 'index'
-        }
-    })
-});
-
-app.get('/:name', (c) => {
-    const { name } = c.req.param();
-
-    return c.view('hello', {
-        meta: {
-            title: 'Hello World',
-        },
-        props: {
-            message: name
-        }
+        props: { }
     })
 });
 

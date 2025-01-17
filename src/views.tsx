@@ -1,6 +1,6 @@
 import { storeViewByName } from "./renderer";
-import Hello from "./view/Hello";
+import Landing from "./view/Landing";
 
 export default function initViews() {
-    storeViewByName('hello', Hello);
+    storeViewByName('landing', Landing);
 }
