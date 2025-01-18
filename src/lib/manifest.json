@@ -4,12 +4,15 @@
     "name": "vendor"
   },
   "src/client.tsx": {
-    "file": "static/client-CagNYaWh.js",
+    "file": "static/client-DAOjMEOb.js",
     "name": "client",
     "src": "src/client.tsx",
     "isEntry": true,
     "imports": [
       "_vendor-CvRECnwm.js"
+    ],
+    "css": [
+      "static/client-IL-x14Vv.css"
     ]
   }
 }

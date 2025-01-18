@@ -11,7 +11,17 @@ export default {
     './src/**/*.{ts,tsx}',
   ],
   prefix: "",
-  theme: { },
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['DM Sans', 'sans-serif'],
+      },
+      colors: {
+        'offwhite': '#f0ecdfff',
+        'industrial': '#303032ff',
+      }
+    }
+  },
   plugins: [
     animate,
     typography,
