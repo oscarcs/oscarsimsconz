@@ -4,7 +4,7 @@
     "name": "vendor"
   },
   "src/client.tsx": {
-    "file": "static/client-BUeYBq0M.js",
+    "file": "static/client-D4jltHuo.js",
     "name": "client",
     "src": "src/client.tsx",
     "isEntry": true,
@@ -12,7 +12,7 @@
       "_vendor-CvRECnwm.js"
     ],
     "css": [
-      "static/client-DY116odr.css"
+      "static/client-CJ6cOnqU.css"
     ]
   }
 }

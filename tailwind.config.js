@@ -17,7 +17,7 @@ export default {
         sans: ['DM Sans', 'sans-serif'],
       },
       colors: {
-        'offwhite': '#f0ecdfff',
+        'offwhite': '#f0eee7ff',
         'industrial': '#303032ff',
       }
     }
