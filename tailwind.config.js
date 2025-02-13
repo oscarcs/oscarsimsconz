@@ -19,6 +19,7 @@ export default {
       colors: {
         'offwhite': '#f0eee7ff',
         'industrial': '#303032ff',
+        'secondary': '#6e7068ff',
       }
     }
   },
