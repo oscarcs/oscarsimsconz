@@ -8,9 +8,9 @@ type LayoutProps = {
 }
 
 export default function App({ children, view, manifest }: LayoutProps) {
-    const viewScript = 'var _hono_view = '  + JSON.stringify(view) + ';'
-    let cssDoms:React.ReactNode[] = []
-    let scriptDoms:React.ReactNode[] = []
+    const viewScript = 'var _hono_view = '  + JSON.stringify(view) + ';';
+    let cssDoms:React.ReactNode[] = [];
+    let scriptDoms:React.ReactNode[] = [];
     
     if (isProd && manifest) {
         
@@ -18,7 +18,7 @@ export default function App({ children, view, manifest }: LayoutProps) {
         const scriptFiles:string[] = [];
         
         for (const [, v] of Object.entries(manifest)) {
-            const item: ManifestItem = v
+            const item: ManifestItem = v;
             
             if (item.isEntry) {
                 item.css?.forEach((c) => {
