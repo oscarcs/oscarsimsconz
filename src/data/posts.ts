@@ -82,28 +82,43 @@ export const posts: Post[] = [
         link: "https://github.com/oscarcs/straight-skeleton-geojson",
         linkText: "View on GitHub",
     },
-    // {
-    //     name: "Legislatures",
-    //     slug: "legislatures",
-    //     shortDescription: "Tool to draw diagrams of legislatures and deliberative assemblies",
-    //     dateDescription: "2022",
-    //     body: `
+    {
+        name: "Legislatures",
+        slug: "legislatures",
+        shortDescription: "Tool to draw diagrams of legislatures and deliberative assemblies",
+        dateDescription: "2017-2022",
+        body: `
+            <p>I have a big interest in politics. Both the 'squishy' social-scientific elements of good governance, but also the mechanical elements,
+            the complex systems that characterize modern political organization - the 'code' of politics. This tool definitely falls into the second category.</p>
 
-    //     `,
-    //     link: "",
-    //     linkText: "View on GitHub"
-    // },
-    // {
-    //     name: "Part IV Research Project",
-    //     slug: "part-iv-project",
-    //     shortDescription: "A tile-based programming language to teach programming concepts",
-    //     dateDescription: "2019",
-    //     body: `
+            <p>XML, a Dutch architecture firm, released a <a href="http://parliamentbook.com/info/about">book</a> containing some nice diagrams of all the
+            parliaments and 'deliberative assemblies' around the world that are responsible for making or approving laws. I own a copy of this book, and it
+            inspired me to write some code to generate some similar diagrams. Naturally, the diagrams this tool generates aren't quite as pretty as the ones
+            designed by hand by Dutch architects, but it does a pretty good job - and definitely improves on some of the ones that Wikipedia uses.</p>
+        `,
+        link: "https://github.com/oscarcs/legislatures",
+        linkText: "View on GitHub"
+    },
+    {
+        name: "Honours Research Project",
+        slug: "part-iv-project",
+        shortDescription: "A tile-based programming language to teach programming concepts",
+        dateDescription: "2019",
+        body: `
+            <p>As part of the University of Auckland Engineering programme, students are expected to work on a research project during their final year.
+            For our project, we were fortunate to be assigned an interesting research topic: creating a tile-based programming environment for teaching
+            novices (especially children and young people) programming. We investigated existing programming systems, and tried to marry together the best
+            parts of existing block-based programming systems (like the visual cues that these environments provide) to a text-based programming language.
+            Most pre-existing work in this space has focused only on block-based programming languages, so this was an interesting challenge.</p>
 
-    //     `,
-    //     link: "",
-    //     linkText: "View on GitHub"
-    // }
+            <p>The project was also exciting because I got to design and implement a fully functional programming language from scratch. We attempted
+            to integrate the language design tightly into the actual operation of the visual environment. Variables in the programming environment
+            were directly correlated with object properties for the entities in the 'world', in an effort to introduce object-oriented programming
+            elements.</p>
+        `,
+        link: "https://github.com/oscarcs/p4p",
+        linkText: "View on GitHub"
+    }
 ];
 
 export function getPostBySlug(slug: string): Post | undefined {

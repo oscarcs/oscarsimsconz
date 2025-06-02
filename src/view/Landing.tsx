@@ -44,7 +44,7 @@ export default function Landing({ children, message, ...props }: AppProps) {
                 <div className="flex flex-col gap-4">
                     <p className="font-semibold"><i>Kia ora</i>, <i>tervetuloa</i>, & <i>tere</i>.</p>
                     <p>I'm Oscar, a software engineer from New Zealand.</p>
-                    <p>I've worked at AI-based startups (twice), a regtech scale-up, and a big cinema software multinational, among other things. I'm most experienced with modern fullstack JS/TS web tooling and C# but I like to try new technologies.</p>
+                    <p>I've worked at AI-based startups (twice), a regtech scale-up, and a big cinema software multinational, among other things. I'm most experienced with modern fullstack Javascript/Typescript web tooling and C# but I like to try new technologies.</p>
                     <p>I'm currently freelancing (and studying the Finnish language) from Tallinn, Estonia, but I'm interested in working on interesting and challenging projects pretty much anywhere. Drop me a line.</p>
                     <p>Outside of work, I'm passionate about <Link href="https://www.stuff.co.nz/opinion/129175203/councils-are-defying-the-need-for-housing-intensification">regulatory</Link> <Link href="https://www.nzherald.co.nz/nz/auckland-heritage-houses-oscar-sims-inner-suburb-density-will-improve-affordability/BUARW3Q4LMMMSDPDHB2XGUGH3M/">reform</Link> to create more <Link href="https://www.greaterauckland.org.nz/2024/04/17/texas-lessons/">liveable cities.</Link></p>
                 </div>
@@ -52,10 +52,10 @@ export default function Landing({ children, message, ...props }: AppProps) {
             <div className="pattern border-b border-industrial"></div>
             <section className="flex flex-col pt-6 pb-6">
                 <div className="flex flex-col gap-4">
-                    <p className="font-semibold">Projects & Posts</p>
+                    <p className="font-semibold">Posts & selected projects</p>
                     <div className="flex flex-col gap-3">
                         {posts.map((post) => (
-                            <div key={post.slug} className="border border-industrial p-4 rounded-sm">
+                            <div key={post.slug} className="border border-industrial p-4">
                                 <div className="flex flex-col gap-2">
                                     <div className="flex justify-between items-start">
                                         <Link href={`/project/${post.slug}`} className="font-medium hover:underline">
