@@ -7,15 +7,17 @@ interface LinkProps {
 }
 
 export function Link({ href, children, className = '' }: LinkProps) {
+  const isExternal = href.startsWith('http://') || href.startsWith('https://') || href.includes('://');
+  
   return (
     <a
       href={href}
       className={`inline-flex items-center hover:opacity-80 hover:underline ${className}`}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
     >
       {children}
-      <ArrowUpRight className="text-secondary h-4 w-4" />
+      {isExternal && <ArrowUpRight className="text-secondary h-4 w-4" />}
     </a>
   );
 }

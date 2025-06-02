@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { renderer } from './renderer';
 import initViews from './views';
 import { ViewRenderer } from './middleware';
+import { getPostBySlug } from './data/posts';
 
 initViews();
 const app = new Hono();
@@ -15,6 +16,23 @@ app.get('/', (c) => {
             title: 'Oscar Sims',
         },
         props: { }
+    });
+});
+
+app.get('/project/:slug', (c) => {
+    const slug = c.req.param('slug');
+    const post = getPostBySlug(slug);
+    
+    if (!post) {
+        return c.notFound();
+    }
+    
+    return c.view('post', {
+        meta: {
+            title: `${post.name} - Oscar Sims`,
+            description: post.shortDescription,
+        },
+        props: { post }
     });
 });
 
