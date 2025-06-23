@@ -45,7 +45,7 @@ export default function Landing({ children, message, ...props }: AppProps) {
                     <p className="font-semibold"><i>Kia ora</i>, <i>tervetuloa</i>, & <i>tere</i>.</p>
                     <p>I'm Oscar, a software engineer from New Zealand.</p>
                     <p>I've worked at AI-based startups (twice), a regtech scale-up, and a big cinema software multinational, among other things. I'm most experienced with modern fullstack Javascript/Typescript web tooling and C# but I like to try new technologies.</p>
-                    <p>I'm currently freelancing (and studying the Finnish language) from Tallinn, Estonia, but I'm interested in working on interesting and challenging projects pretty much anywhere. Drop me a line.</p>
+                    <p>I'm currently freelancing (and studying the Finnish language) from Tallinn, Estonia. I'm actively looking for interesting and challenging projects to work on. Drop me a line.</p>
                     <p>Outside of work, I'm passionate about <Link href="https://www.stuff.co.nz/opinion/129175203/councils-are-defying-the-need-for-housing-intensification">regulatory</Link> <Link href="https://www.nzherald.co.nz/nz/auckland-heritage-houses-oscar-sims-inner-suburb-density-will-improve-affordability/BUARW3Q4LMMMSDPDHB2XGUGH3M/">reform</Link> to create more <Link href="https://www.greaterauckland.org.nz/2024/04/17/texas-lessons/">liveable cities.</Link></p>
                 </div>
             </section>
