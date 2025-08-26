@@ -23,7 +23,7 @@ export default function Landing({ children, message, ...props }: AppProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 py-6">
                     <div className="flex flex-row items-center gap-2">
                         <MapPin className="inline-block" size="14"></MapPin>
-                        Tallinn, Estonia (<Time></Time>)
+                        Melbourne, Australia (<Time></Time>)
                     </div>
                     <div className="flex flex-row items-center gap-2">
                         <Mail className="inline-block" size="14"></Mail>
@@ -42,10 +42,10 @@ export default function Landing({ children, message, ...props }: AppProps) {
             <div className="pattern border-b border-industrial"></div>
             <section className="flex flex-col pt-6 pb-6">
                 <div className="flex flex-col gap-4">
-                    <p className="font-semibold"><i>Kia ora</i>, <i>tervetuloa</i>, & <i>tere</i>.</p>
+                    <p className="font-semibold"><i>Kia ora</i> and <i>tervetuloa</i>.</p>
                     <p>I'm Oscar, a software engineer from New Zealand.</p>
                     <p>I've worked at AI-based startups (twice), a regtech scale-up, and a big cinema software multinational, among other things. I'm most experienced with modern fullstack Javascript/Typescript web tooling and C# but I like to try new technologies.</p>
-                    <p>I'm currently freelancing (and studying the Finnish language) from Tallinn, Estonia. I'm actively looking for interesting and challenging projects to work on. Drop me a line.</p>
+                    <p>I'm actively looking for interesting and challenging projects to work on. Drop me a line.</p>
                     <p>Outside of work, I'm passionate about <Link href="https://www.stuff.co.nz/opinion/129175203/councils-are-defying-the-need-for-housing-intensification">regulatory</Link> <Link href="https://www.nzherald.co.nz/nz/auckland-heritage-houses-oscar-sims-inner-suburb-density-will-improve-affordability/BUARW3Q4LMMMSDPDHB2XGUGH3M/">reform</Link> to create more <Link href="https://www.greaterauckland.org.nz/2024/04/17/texas-lessons/">liveable cities.</Link></p>
                 </div>
             </section>

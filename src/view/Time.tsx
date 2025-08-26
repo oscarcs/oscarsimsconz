@@ -6,7 +6,7 @@ export function Time() {
     useEffect(() => {
         const updateTime = () => {
             const formatter = new Intl.DateTimeFormat('en-US', {
-                timeZone: 'Europe/Tallinn',
+                timeZone: 'Australia/Melbourne',
                 hour: '2-digit',
                 minute: '2-digit',
             });
