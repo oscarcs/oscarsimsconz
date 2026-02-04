@@ -1,18 +1,18 @@
 {
-  "_vendor-CvRECnwm.js": {
-    "file": "static/vendor-CvRECnwm.js",
+  "_vendor-C6WxKkic.js": {
+    "file": "static/vendor-C6WxKkic.js",
     "name": "vendor"
   },
   "src/client.tsx": {
-    "file": "static/client-CYExT4A1.js",
+    "file": "static/client-Bxjk-Xkm.js",
     "name": "client",
     "src": "src/client.tsx",
     "isEntry": true,
     "imports": [
-      "_vendor-CvRECnwm.js"
+      "_vendor-C6WxKkic.js"
     ],
     "css": [
-      "static/client-EpYFYnEO.css"
+      "static/client-ez9OgYTy.css"
     ]
   }
 }

@@ -49,7 +49,7 @@ export default function App({ children, view, manifest }: LayoutProps) {
                 <meta name="description" content={view.meta.description || view.meta.title} />
                 {cssDoms}
                 <script dangerouslySetInnerHTML={{__html: viewScript}} />
-                {!isProd && <script type="module" src="http://localhost:5174/src/client.tsx"></script>}
+                {!isProd && <script type="module" dangerouslySetInnerHTML={{__html: `import("http://" + location.hostname + ":5174/src/client.tsx")`}} />}
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />

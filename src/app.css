@@ -1,6 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --font-sans: 'DM Sans', sans-serif;
+    --color-offwhite: #f0eee7ff;
+    --color-industrial: #303032ff;
+    --color-secondary: #6e7068ff;
+}
 
 @layer base {
     h1 {
