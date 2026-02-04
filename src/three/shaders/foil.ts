@@ -30,10 +30,9 @@ export function createFoilShader(
             texUv.y.sub(0.5),
         );
 
-        // Color channel analysis
-        const low = min(tex.r, min(tex.g, tex.b));
-        const high = max(tex.r, max(tex.g, tex.b));
-        const delta = min(high, max(float(0.5), float(1.0).sub(low)));
+        // Uniform blend strength — original was color-dependent which made
+        // text/QR appear as a separate layer above the shader effect.
+        const delta = float(0.5);
 
         // fac1: circular interference rings
         const len90 = length(adjusted_uv.mul(90.0));

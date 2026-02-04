@@ -5,7 +5,7 @@
 // We map: timeUniform -> holo.x (and `time`), mouseUniform -> holo.y
 
 import {
-    vec4, float, uv, sin, cos, abs, min, max,
+    vec4, float, uv, sin, cos, abs, max,
     texture, Fn, If,
 } from 'three/tsl';
 import type { ShaderNodeObject, UniformNode, Node } from 'three/tsl';
@@ -52,10 +52,8 @@ export function createHolographicShader(
         hsl.y.assign(hsl.y.mul(1.3));
         hsl.z.assign(hsl.z.mul(0.6).add(0.4));
 
-        // Color analysis for blend strength (reduced to preserve QR contrast)
-        const low = min(tex.r, min(tex.g, tex.b));
-        const high = max(tex.r, max(tex.g, tex.b));
-        const delta = float(0.12).add(float(0.2).mul(high.sub(low))).add(high.mul(0.06));
+        // Uniform blend strength so the effect covers text/QR equally
+        const delta = float(0.22);
 
         // Blend between original and holo-shifted color
         const holoRgb = RGBFn(hsl).mul(vec4(0.9, 0.8, 1.2, tex.a));
