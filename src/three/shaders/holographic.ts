@@ -23,9 +23,9 @@ export function createHolographicShader(
         const t = float(timeUniform);
         const mouse = float(mouseUniform);
 
-        // Blend base texture toward blue (reduced from 0.5 to preserve contrast)
-        const blended = tex.mul(0.75).add(vec4(0.0, 0.0, 0.25, tex.a.mul(0.25)));
-        const hsl = HSLFn(blended).toVar();
+        // Convert original to HSL directly — no blue pre-blend, which
+        // was desaturating gold elements and making hue rotation invisible.
+        const hsl = HSLFn(tex).toVar();
 
         // Animated field (scale=250, time offset by mouse)
         const fieldTime = mouse.mul(7.221).add(t);
@@ -47,12 +47,13 @@ export function createHolographicShader(
         const line3 = max(float(7.0).mul(cos(gy.sub(gx))).sub(6.0), 0.0);
         const fac = float(0.5).mul(max(line1, max(line2, line3)));
 
-        // Rotate hue by field + grid
+        // Rotate hue by field + grid, ensure enough saturation for
+        // the rainbow shift to be visible on all card elements
         hsl.x.assign(hsl.x.add(res).add(fac));
-        hsl.y.assign(hsl.y.mul(1.3));
+        hsl.y.assign(max(hsl.y, float(0.35)).mul(1.3));
         hsl.z.assign(hsl.z.mul(0.6).add(0.4));
 
-        // Uniform blend strength so the effect covers text/QR equally
+        // Uniform blend strength
         const delta = float(0.22);
 
         // Blend between original and holo-shifted color

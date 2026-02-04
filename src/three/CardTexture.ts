@@ -120,7 +120,7 @@ export async function createCardTexture(): Promise<CanvasTexture> {
     ctx.stroke();
 
     // Title text
-    ctx.fillStyle = '#e8dcc8';
+    ctx.fillStyle = '#d4a84b';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = "700 52px 'DM Sans', sans-serif";
@@ -178,7 +178,7 @@ export async function createCardTexture(): Promise<CanvasTexture> {
     ctx.stroke();
 
     // "SOFTWARE ENGINEER" — upper half of text box
-    ctx.fillStyle = '#e8dcc8';
+    ctx.fillStyle = '#d4a84b';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = "600 44px 'DM Sans', sans-serif";
@@ -186,7 +186,7 @@ export async function createCardTexture(): Promise<CanvasTexture> {
     ctx.fillText('SOFTWARE ENGINEER', WIDTH / 2, textBoxY + textBoxH * 0.25 + 2);
 
     // "ANTIPODEAN SYSTEMS" — lower half
-    ctx.fillStyle = '#8a8170';
+    ctx.fillStyle = '#a08545';
     ctx.font = "400 36px 'DM Sans', sans-serif";
     ctx.letterSpacing = '6px';
     ctx.fillText('ANTIPODEAN SYSTEMS', WIDTH / 2, textBoxY + textBoxH * 0.72);
