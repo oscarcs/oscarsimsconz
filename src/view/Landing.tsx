@@ -1,78 +1,121 @@
 'use client';
 
-import { Building2, Mail, MapPin } from "lucide-react";
-import { Link } from "./Link";
-import { Time } from "./Time";
-import { getAllPosts } from "../data/posts";
+import { useEffect, useRef, useState } from 'react';
+import { Link } from './Link';
+import { getAllPosts } from '../data/posts';
 
-type AppProps = {
-    children: React.ReactNode,
-    message: string,
-};
+type EditionType = 'foil' | 'holographic' | 'polychrome';
 
-export default function Landing({ children, message, ...props }: AppProps) {
+const editions: { type: EditionType; label: string }[] = [
+    { type: 'foil', label: 'Foil' },
+    { type: 'holographic', label: 'Holographic' },
+    { type: 'polychrome', label: 'Polychrome' },
+];
+
+export default function Landing() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const sceneRef = useRef<any>(null);
+    const [edition, setEdition] = useState<EditionType>('holographic');
     const posts = getAllPosts();
-    
-    return <div className="w-full min-h-screen flex flex-col bg-offwhite p-6 pb-0" {...props}>
-        <div className="flex flex-col grow max-w-xl mx-auto">
-            <div className="shrink-0 v3 text-industrial flex flex-col">
-                <div className="pattern text-industrial border flex flex-col border-industrial px-10 py-2 items-center">
-                    <div className="v1">Oscar Sims</div>
-                    <div className="v2">Software engineer from Auckland, NZ.</div>
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        let disposed = false;
+
+        (async () => {
+            await import('../three/webgpu-polyfill');
+            const { BusinessCard } = await import('../three/BusinessCard');
+            if (disposed) return;
+            const scene = new BusinessCard(container);
+            sceneRef.current = scene;
+            await scene.init();
+            if (disposed) {
+                scene.dispose();
+                return;
+            }
+            scene.setEdition(edition);
+        })();
+
+        return () => {
+            disposed = true;
+            sceneRef.current?.dispose();
+            sceneRef.current = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        sceneRef.current?.setEdition(edition);
+    }, [edition]);
+
+    return (
+        <div className="w-full min-h-screen flex flex-col bg-[#0a0a0a] text-white">
+            {/* Top nav */}
+            <nav className="flex items-center justify-between px-6 py-4 shrink-0">
+                <span className="text-lg font-bold tracking-tight">Oscar Sims</span>
+                <div className="flex items-center gap-5 text-sm text-gray-400">
+                    <a href="mailto:oscar@oscarsims.co.nz" className="hover:text-white transition-colors">
+                        Email
+                    </a>
+                    <Link href="https://github.com/oscarcs">
+                        GitHub
+                    </Link>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 py-6">
-                    <div className="flex flex-row items-center gap-2">
-                        <MapPin className="inline-block" size="14"></MapPin>
-                        Melbourne, Australia (<Time></Time>)
-                    </div>
-                    <div className="flex flex-row items-center gap-2">
-                        <Mail className="inline-block" size="14"></Mail>
-                        oscar@oscarsims.co.nz
-                    </div>
-                    <div className="flex flex-row items-center gap-2">
-                        <Building2 className="inline-block" size="14"></Building2>
-                        <Link href="https://antipodean.ee">Antipodean Systems OÜ</Link>
-                    </div>
-                    <div className="flex flex-row items-center gap-2">
-                        <img height="14" width="14" src="https://cdn.simpleicons.org/github/303032ff" />
-                        <Link href="https://github.com/oscarcs">oscarcs</Link>
-                    </div>
-                </div>
-            </div>
-            <div className="pattern border-b border-industrial"></div>
-            <section className="flex flex-col pt-6 pb-6">
-                <div className="flex flex-col gap-4">
-                    <p className="font-semibold"><i>Kia ora</i> and <i>tervetuloa</i>.</p>
-                    <p>I'm Oscar, a software engineer from New Zealand.</p>
-                    <p>I've worked at AI-based startups (twice), a regtech scale-up, and a big cinema software multinational, among other things. I'm most experienced with modern fullstack Javascript/Typescript web tooling and C# but I like to try new technologies.</p>
-                    <p>I'm actively looking for interesting and challenging projects to work on. Drop me a line.</p>
-                    <p>Outside of work, I'm passionate about <Link href="https://www.stuff.co.nz/opinion/129175203/councils-are-defying-the-need-for-housing-intensification">regulatory</Link> <Link href="https://www.nzherald.co.nz/nz/auckland-heritage-houses-oscar-sims-inner-suburb-density-will-improve-affordability/BUARW3Q4LMMMSDPDHB2XGUGH3M/">reform</Link> to create more <Link href="https://www.greaterauckland.org.nz/2024/04/17/texas-lessons/">liveable cities.</Link></p>
-                </div>
-            </section>
-            <div className="pattern border-b border-industrial"></div>
-            <section className="flex flex-col pt-6 pb-6">
-                <div className="flex flex-col gap-4">
-                    <p className="font-semibold">Posts & selected projects</p>
-                    <div className="flex flex-col gap-3">
-                        {posts.map((post) => (
-                            <div key={post.slug} className="border border-industrial p-4">
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex justify-between items-start">
-                                        <Link href={`/project/${post.slug}`} className="font-medium hover:underline">
-                                            {post.name}
-                                        </Link>
-                                        <span className="text-sm text-gray-600">{post.dateDescription}</span>
-                                    </div>
-                                    <p className="text-sm text-industrial">{post.shortDescription}</p>
-                                </div>
-                            </div>
+            </nav>
+
+            {/* Main two-column layout */}
+            <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-stretch gap-8 px-6 py-8">
+                {/* Card column */}
+                <div className="flex flex-col items-center justify-center lg:flex-1">
+                    <div
+                        ref={containerRef}
+                        className="card-canvas-container w-full max-w-sm aspect-[2.5/3.5] relative"
+                    />
+
+                    {/* Edition switcher */}
+                    <div className="flex gap-2 mt-6">
+                        {editions.map((e) => (
+                            <button
+                                key={e.type}
+                                onClick={() => setEdition(e.type)}
+                                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                                    edition === e.type
+                                        ? 'bg-white text-black'
+                                        : 'bg-white/10 text-gray-400 hover:bg-white/20 hover:text-white'
+                                }`}
+                            >
+                                {e.label}
+                            </button>
                         ))}
                     </div>
                 </div>
-            </section>
+
+                {/* Posts column */}
+                <div className="flex flex-col lg:flex-1 lg:max-w-md w-full lg:justify-center">
+                    <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Posts & Projects</h2>
+                    <div className="flex flex-col gap-3">
+                        {posts.map((post) => (
+                            <a
+                                key={post.slug}
+                                href={`/project/${post.slug}`}
+                                className="group block border border-white/10 rounded-lg p-4 hover:border-white/25 transition-colors"
+                            >
+                                <div className="flex justify-between items-start gap-4">
+                                    <span className="font-medium group-hover:text-white text-gray-200">{post.name}</span>
+                                    <span className="text-xs text-gray-500 shrink-0">{post.dateDescription}</span>
+                                </div>
+                                <p className="text-sm text-gray-500 mt-1">{post.shortDescription}</p>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Footer */}
+            <footer className="shrink-0 px-6 py-4 border-t border-white/10 flex items-center justify-center gap-x-6 text-sm text-gray-500">
+                <Link href="https://antipodean.ee">Antipodean Systems</Link>
+            </footer>
         </div>
-        <footer className="text-industrial text-sm text-center w-full border-t border-industrial border-dashed py-2">
-            © 2025 Oscar Sims
-        </footer>
-    </div>;
+    );
 }
