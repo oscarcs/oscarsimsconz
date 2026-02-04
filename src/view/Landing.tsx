@@ -30,7 +30,7 @@ export default function Landing() {
             {/* Main two-column layout */}
             <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8 px-6 py-8 mx-auto w-full max-w-5xl">
                 {/* Card column */}
-                <div className="flex flex-col items-center justify-center lg:w-1/2">
+                <div className="flex flex-col items-center justify-center w-full lg:w-1/2">
                     <div
                         id="card-container"
                         className="card-canvas-container w-full max-w-sm aspect-[2.5/3.5] relative"
