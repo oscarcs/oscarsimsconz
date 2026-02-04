@@ -1,3 +1,4 @@
+import './three/webgpu-polyfill';
 import { Hono } from 'hono';
 import { renderer } from './renderer';
 import initViews from './views';
