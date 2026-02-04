@@ -11,49 +11,38 @@ viewRenderer(view.name || '', view);
 
 // Three.js card — initialized here (client-only entry) so three.js
 // is never bundled into the Cloudflare Worker.
-// Temporary debug helper
-function dbg(msg: string) {
-    const el = document.getElementById('card-debug');
-    if (el) el.textContent += msg + '\n';
-}
+// Temporary debug helper — appends to body so React hydration can't wipe it
+const _dbgEl = document.createElement('pre');
+_dbgEl.id = 'card-debug';
+_dbgEl.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;color:lime;font-size:11px;padding:8px;white-space:pre-wrap;word-break:break-all;background:#000;max-height:40vh;overflow:auto;';
+document.body.appendChild(_dbgEl);
+function dbg(msg: string) { _dbgEl.textContent += msg + '\n'; }
 
-const cardContainer = document.getElementById('card-container');
-if (cardContainer) {
-    const debugEl = document.createElement('pre');
-    debugEl.id = 'card-debug';
-    debugEl.style.cssText = 'color:lime;font-size:11px;padding:8px;white-space:pre-wrap;word-break:break-all;background:#111;';
-    cardContainer.appendChild(debugEl);
-}
-
-dbg(`view.name="${view.name}" container=${!!cardContainer}`);
-dbg(`navigator.gpu=${typeof navigator.gpu}`);
+dbg(`view="${view.name}" gpu=${typeof navigator.gpu} ua=${navigator.userAgent.slice(0,80)}`);
 
 if (view.name === 'landing') {
+    const cardContainer = document.getElementById('card-container');
+    dbg(`container=${!!cardContainer}`);
     if (cardContainer) {
         const editions: EditionType[] = ['foil', 'holographic', 'polychrome'];
         const edition = editions[Math.floor(Math.random() * editions.length)];
-        dbg(`edition=${edition}`);
 
         (async () => {
             try {
-                dbg('importing polyfill...');
+                dbg('polyfill...');
                 await import('./three/webgpu-polyfill');
-                dbg('importing BusinessCard...');
+                dbg('BusinessCard...');
                 const { BusinessCard } = await import('./three/BusinessCard');
-                dbg('creating scene...');
+                dbg('new scene...');
                 const scene = new BusinessCard(cardContainer);
-                dbg('calling init...');
+                dbg('init...');
                 await scene.init();
-                dbg('setting edition...');
+                dbg('setEdition...');
                 scene.setEdition(edition);
-                dbg('done!');
-                // Remove debug overlay on success
-                document.getElementById('card-debug')?.remove();
+                dbg('OK!');
             } catch (e) {
-                dbg(`ERROR: ${e}\n${(e as Error).stack || ''}`);
+                dbg(`ERR: ${e}\n${(e as Error).stack || ''}`);
             }
         })();
     }
-} else {
-    dbg('not landing page, skipping card init');
 }
