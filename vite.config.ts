@@ -46,41 +46,12 @@ export default defineConfig(({ mode }) => {
             plugins: [
                 preserveDirectives(),
                 basicSsl(),
-                build(),
+                build({ external: ['three', 'three/webgpu', 'three/tsl', 'qrcode'] }),
                 devServer({
                     adapter,
                     entry: 'src/index.tsx'
                 }),
             ],
-            // Replace WebGPU constants at build time so Three.js can
-            // evaluate at module scope in Cloudflare Workers.
-            define: {
-                'GPUShaderStage.VERTEX': '1',
-                'GPUShaderStage.FRAGMENT': '2',
-                'GPUShaderStage.COMPUTE': '4',
-                'GPUBufferUsage.MAP_READ': '1',
-                'GPUBufferUsage.MAP_WRITE': '2',
-                'GPUBufferUsage.COPY_SRC': '4',
-                'GPUBufferUsage.COPY_DST': '8',
-                'GPUBufferUsage.INDEX': '16',
-                'GPUBufferUsage.VERTEX': '32',
-                'GPUBufferUsage.UNIFORM': '64',
-                'GPUBufferUsage.STORAGE': '128',
-                'GPUBufferUsage.INDIRECT': '256',
-                'GPUBufferUsage.QUERY_RESOLVE': '512',
-                'GPUTextureUsage.COPY_SRC': '1',
-                'GPUTextureUsage.COPY_DST': '2',
-                'GPUTextureUsage.TEXTURE_BINDING': '4',
-                'GPUTextureUsage.STORAGE_BINDING': '8',
-                'GPUTextureUsage.RENDER_ATTACHMENT': '16',
-                'GPUColorWrite.RED': '1',
-                'GPUColorWrite.GREEN': '2',
-                'GPUColorWrite.BLUE': '4',
-                'GPUColorWrite.ALPHA': '8',
-                'GPUColorWrite.ALL': '15',
-                'GPUMapMode.READ': '1',
-                'GPUMapMode.WRITE': '2',
-            },
             server: {
                 host: true,
             },
