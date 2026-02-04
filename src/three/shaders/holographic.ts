@@ -23,8 +23,8 @@ export function createHolographicShader(
         const t = float(timeUniform);
         const mouse = float(mouseUniform);
 
-        // Blend base texture toward blue, then convert to HSL
-        const blended = tex.mul(0.5).add(vec4(0.0, 0.0, 0.5, tex.a.mul(0.5)));
+        // Blend base texture toward blue (reduced from 0.5 to preserve contrast)
+        const blended = tex.mul(0.75).add(vec4(0.0, 0.0, 0.25, tex.a.mul(0.25)));
         const hsl = HSLFn(blended).toVar();
 
         // Animated field (scale=250, time offset by mouse)
@@ -52,10 +52,10 @@ export function createHolographicShader(
         hsl.y.assign(hsl.y.mul(1.3));
         hsl.z.assign(hsl.z.mul(0.6).add(0.4));
 
-        // Color analysis for blend strength
+        // Color analysis for blend strength (reduced to preserve QR contrast)
         const low = min(tex.r, min(tex.g, tex.b));
         const high = max(tex.r, max(tex.g, tex.b));
-        const delta = float(0.2).add(float(0.3).mul(high.sub(low))).add(high.mul(0.1));
+        const delta = float(0.12).add(float(0.2).mul(high.sub(low))).add(high.mul(0.06));
 
         // Blend between original and holo-shifted color
         const holoRgb = RGBFn(hsl).mul(vec4(0.9, 0.8, 1.2, tex.a));

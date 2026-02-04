@@ -1,21 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from './Link';
+import { Time } from './Time';
 import { getAllPosts } from '../data/posts';
 
 type EditionType = 'foil' | 'holographic' | 'polychrome';
-
-const editions: { type: EditionType; label: string }[] = [
-    { type: 'foil', label: 'Foil' },
-    { type: 'holographic', label: 'Holographic' },
-    { type: 'polychrome', label: 'Polychrome' },
-];
+const editionTypes: EditionType[] = ['foil', 'holographic', 'polychrome'];
 
 export default function Landing() {
     const containerRef = useRef<HTMLDivElement>(null);
     const sceneRef = useRef<any>(null);
-    const [edition, setEdition] = useState<EditionType>('holographic');
     const posts = getAllPosts();
 
     useEffect(() => {
@@ -23,6 +18,7 @@ export default function Landing() {
         if (!container) return;
 
         let disposed = false;
+        const edition = editionTypes[Math.floor(Math.random() * editionTypes.length)];
 
         (async () => {
             await import('../three/webgpu-polyfill');
@@ -45,54 +41,38 @@ export default function Landing() {
         };
     }, []);
 
-    useEffect(() => {
-        sceneRef.current?.setEdition(edition);
-    }, [edition]);
-
     return (
         <div className="w-full min-h-screen flex flex-col bg-[#0a0a0a] text-white">
             {/* Top nav */}
-            <nav className="flex items-center justify-between px-6 py-4 shrink-0">
-                <span className="text-lg font-bold tracking-tight">Oscar Sims</span>
-                <div className="flex items-center gap-5 text-sm text-gray-400">
-                    <a href="mailto:oscar@oscarsims.co.nz" className="hover:text-white transition-colors">
-                        Email
-                    </a>
-                    <Link href="https://github.com/oscarcs">
-                        GitHub
-                    </Link>
+            <nav className="px-6 py-4 shrink-0">
+                <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold tracking-tight">Oscar Sims</span>
+                    <div className="flex items-center gap-5 text-sm text-gray-400">
+                        <a href="mailto:oscar@oscarsims.co.nz" className="hover:text-white transition-colors">
+                            Email
+                        </a>
+                        <Link href="https://github.com/oscarcs">
+                            GitHub
+                        </Link>
+                    </div>
+                </div>
+                <div className="text-xs font-light uppercase tracking-widest text-gray-500 mt-1">
+                    Melbourne, Australia · <Time />
                 </div>
             </nav>
 
             {/* Main two-column layout */}
-            <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-stretch gap-8 px-6 py-8">
+            <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8 px-6 py-8 mx-auto w-full max-w-5xl">
                 {/* Card column */}
-                <div className="flex flex-col items-center justify-center lg:flex-1">
+                <div className="flex flex-col items-center justify-center lg:w-1/2">
                     <div
                         ref={containerRef}
                         className="card-canvas-container w-full max-w-sm aspect-[2.5/3.5] relative"
                     />
-
-                    {/* Edition switcher */}
-                    <div className="flex gap-2 mt-6">
-                        {editions.map((e) => (
-                            <button
-                                key={e.type}
-                                onClick={() => setEdition(e.type)}
-                                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                                    edition === e.type
-                                        ? 'bg-white text-black'
-                                        : 'bg-white/10 text-gray-400 hover:bg-white/20 hover:text-white'
-                                }`}
-                            >
-                                {e.label}
-                            </button>
-                        ))}
-                    </div>
                 </div>
 
                 {/* Posts column */}
-                <div className="flex flex-col lg:flex-1 lg:max-w-md w-full lg:justify-center">
+                <div className="flex flex-col lg:w-1/2 w-full lg:justify-center">
                     <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Posts & Projects</h2>
                     <div className="flex flex-col gap-3">
                         {posts.map((post) => (

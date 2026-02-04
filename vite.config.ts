@@ -56,7 +56,7 @@ export default defineConfig(({ mode }) => {
                 host: true,
             },
             ssr: {
-                external: ['react', 'react-dom', 'three'],
+                external: ['react', 'react-dom', 'three', 'qrcode'],
             },
             resolve: {
                 alias: {
