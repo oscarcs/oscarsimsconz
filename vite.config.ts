@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
             plugins: [
                 preserveDirectives(),
                 basicSsl(),
-                build({ external: ['three', 'three/webgpu', 'three/tsl', 'qrcode'] }),
+                build(),
                 devServer({
                     adapter,
                     entry: 'src/index.tsx'

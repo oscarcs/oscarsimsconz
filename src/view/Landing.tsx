@@ -1,45 +1,11 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { Link } from './Link';
 import { Time } from './Time';
 import { getAllPosts } from '../data/posts';
 
-type EditionType = 'foil' | 'holographic' | 'polychrome';
-const editionTypes: EditionType[] = ['foil', 'holographic', 'polychrome'];
-
 export default function Landing() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const sceneRef = useRef<any>(null);
     const posts = getAllPosts();
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        let disposed = false;
-        const edition = editionTypes[Math.floor(Math.random() * editionTypes.length)];
-
-        (async () => {
-            await import('../three/webgpu-polyfill');
-            const { BusinessCard } = await import('../three/BusinessCard');
-            if (disposed) return;
-            const scene = new BusinessCard(container);
-            sceneRef.current = scene;
-            await scene.init();
-            if (disposed) {
-                scene.dispose();
-                return;
-            }
-            scene.setEdition(edition);
-        })();
-
-        return () => {
-            disposed = true;
-            sceneRef.current?.dispose();
-            sceneRef.current = null;
-        };
-    }, []);
 
     return (
         <div className="w-full min-h-screen flex flex-col bg-[#0a0a0a] text-white">
@@ -66,7 +32,7 @@ export default function Landing() {
                 {/* Card column */}
                 <div className="flex flex-col items-center justify-center lg:w-1/2">
                     <div
-                        ref={containerRef}
+                        id="card-container"
                         className="card-canvas-container w-full max-w-sm aspect-[2.5/3.5] relative"
                     />
                 </div>
