@@ -33,6 +33,11 @@ export class MouseTracker {
     private boundTouchEnd: () => void;
     private boundClick: () => void;
 
+    // Kick impulse state
+    private kickVelocity = { x: 0, y: 0 };
+    private kickOffset = { x: 0, y: 0 };
+    private lastTime = 0;
+
     // Exposed for shader uniforms
     mouseX = 0;
     mouseY = 0;
@@ -205,9 +210,20 @@ export class MouseTracker {
         this.normalizedMouse.y = 0;
     }
 
+    // --- Kick impulse ---
+
+    /** Apply a rotational kick. direction: -1 (left) or 1 (right). */
+    kick(direction: number) {
+        this.kickVelocity.y = direction * 4;
+        this.kickVelocity.x = (Math.random() - 0.5) * 6;
+    }
+
     // --- Frame update ---
 
     update(time: number) {
+        const dt = this.lastTime ? Math.min(time - this.lastTime, 0.05) : 0.016;
+        this.lastTime = time;
+
         if (!this.hovering) {
             // Idle breathing animation
             this.targetRotation.x = Math.sin(time * 0.5) * IDLE_TILT;
@@ -217,12 +233,28 @@ export class MouseTracker {
             this.mesh.position.y = 0;
         }
 
+        // Spring-damper for kick: pull back toward 0, dampen velocity
+        const stiffness = 35;
+        const damping = 6;
+        this.kickVelocity.x += (-stiffness * this.kickOffset.x - damping * this.kickVelocity.x) * dt;
+        this.kickVelocity.y += (-stiffness * this.kickOffset.y - damping * this.kickVelocity.y) * dt;
+        this.kickOffset.x += this.kickVelocity.x * dt;
+        this.kickOffset.y += this.kickVelocity.y * dt;
+
+        // Kill tiny residual motion
+        if (Math.abs(this.kickOffset.x) < 0.0001 && Math.abs(this.kickVelocity.x) < 0.001) {
+            this.kickOffset.x = 0; this.kickVelocity.x = 0;
+        }
+        if (Math.abs(this.kickOffset.y) < 0.0001 && Math.abs(this.kickVelocity.y) < 0.001) {
+            this.kickOffset.y = 0; this.kickVelocity.y = 0;
+        }
+
         // Smooth lerp toward target
         this.currentRotation.x += (this.targetRotation.x - this.currentRotation.x) * LERP_SPEED;
         this.currentRotation.y += (this.targetRotation.y - this.currentRotation.y) * LERP_SPEED;
 
-        this.mesh.rotation.x = this.currentRotation.x;
-        this.mesh.rotation.y = this.currentRotation.y;
+        this.mesh.rotation.x = this.currentRotation.x + this.kickOffset.x;
+        this.mesh.rotation.y = this.currentRotation.y + this.kickOffset.y;
 
         // Expose for shaders
         this.mouseX = this.normalizedMouse.x;

@@ -17,7 +17,7 @@ export function Link({ href, children, className = '' }: LinkProps) {
       rel={isExternal ? "noopener noreferrer" : undefined}
     >
       {children}
-      {isExternal && <ArrowUpRight className="text-secondary h-4 w-4" />}
+      {isExternal && <ArrowUpRight className="h-4 w-4 opacity-50" />}
     </a>
   );
 }

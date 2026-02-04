@@ -4,9 +4,6 @@
 
 @theme {
     --font-sans: 'DM Sans', sans-serif;
-    --color-offwhite: #f0eee7ff;
-    --color-industrial: #303032ff;
-    --color-secondary: #6e7068ff;
 }
 
 @layer base {
@@ -28,31 +25,6 @@
 
     h5 {
         @apply text-sm font-bold;
-    }
-
-    .v1 {
-        @apply text-6xl font-black tracking-tight;
-    }
-
-    .v2 {
-        @apply text-2xl italic tracking-[-0.01em];
-        font-family: 'Comorant', serif;
-    }
-
-    .v3 {
-        @apply font-light;
-    }
-
-    .v4 {
-        font-family: 'Comorant', serif;
-        @apply text-2xl font-bold mb-2;
-    }
-
-    .pattern {
-        background-color: #f0eee7;
-        opacity: 1;
-        background: radial-gradient(circle, transparent 20%, #f0eee7 20%, #f0eee7 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #f0eee7 20%, #f0eee7 80%, transparent 80%, transparent) 15px 15px, linear-gradient(#d8d6cf 1.2000000000000002px, transparent 1.2000000000000002px) 0 -0.6000000000000001px, linear-gradient(90deg, #d8d6cf 1.2000000000000002px, #f0eee7 1.2000000000000002px) -0.6000000000000001px 0;
-        background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
     }
 
     .card-canvas-container canvas {

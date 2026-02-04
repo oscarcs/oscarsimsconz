@@ -15,7 +15,7 @@ import { createPolychromeShader } from './shaders/polychrome';
 
 export type EditionType = 'foil' | 'holographic' | 'polychrome';
 
-export class BusinessCard {
+export class PlayingCard {
     private renderer!: WebGPURenderer;
     private camera!: PerspectiveCamera;
     private scene!: Scene;
@@ -89,6 +89,10 @@ export class BusinessCard {
         if (mat && this.mesh) {
             this.mesh.material = mat;
         }
+    }
+
+    kick(direction: number) {
+        this.mouseTracker.kick(direction);
     }
 
     private updateSize() {

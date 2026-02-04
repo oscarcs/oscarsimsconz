@@ -148,12 +148,11 @@ export function createFoilShader(
             0.0,
         );
 
-        // Apply foil coloring: subtle blue boost, gentle red/green shift
-        // Scaled down from original (0.3/0.3/1.9) to preserve QR scannability
+        // Apply foil coloring: purple hue — red + blue boost, suppress green
         const strength = float(0.4);
         const scaledDelta = delta.mul(strength);
-        const newR = tex.r.sub(scaledDelta).add(scaledDelta.mul(maxfac).mul(0.3));
-        const newG = tex.g.sub(scaledDelta).add(scaledDelta.mul(maxfac).mul(0.3));
+        const newR = tex.r.sub(scaledDelta).add(scaledDelta.mul(maxfac).mul(0.7));
+        const newG = tex.g.sub(scaledDelta).add(scaledDelta.mul(maxfac).mul(0.15));
         const newB = tex.b.add(scaledDelta.mul(maxfac).mul(1.5));
 
         return vec4(newR, newG, newB, tex.a);

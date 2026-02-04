@@ -74,7 +74,7 @@ export async function createCardTexture(): Promise<CanvasTexture> {
 
     // === Outer card body — deep navy ===
     roundRect(ctx, 0, 0, WIDTH, HEIGHT, outerR);
-    ctx.fillStyle = '#1a1f3d';
+    ctx.fillStyle = '#271a3d';
     ctx.fill();
 
     // === Gold outer border ===
@@ -85,7 +85,7 @@ export async function createCardTexture(): Promise<CanvasTexture> {
 
     // === Inner card panel — slightly lighter navy ===
     roundRect(ctx, innerL, innerT, innerW, innerH, innerR);
-    ctx.fillStyle = '#232952';
+    ctx.fillStyle = '#302352';
     ctx.fill();
 
     // === Gold inner border ===
@@ -104,7 +104,7 @@ export async function createCardTexture(): Promise<CanvasTexture> {
     const titleBarH = 90;
 
     // Title bar background — darker band
-    ctx.fillStyle = '#1a1f3d';
+    ctx.fillStyle = '#271a3d';
     ctx.fillRect(contentL, titleBarY, contentW, titleBarH);
 
     // Title bar borders (top and bottom gold lines)
@@ -133,9 +133,9 @@ export async function createCardTexture(): Promise<CanvasTexture> {
 
     // Art window background — dark with subtle gradient
     const artGrad = ctx.createLinearGradient(contentL, artY, contentL, artY + artH);
-    artGrad.addColorStop(0, '#1e2448');
-    artGrad.addColorStop(0.5, '#161a38');
-    artGrad.addColorStop(1, '#1e2448');
+    artGrad.addColorStop(0, '#2c1e48');
+    artGrad.addColorStop(0.5, '#221638');
+    artGrad.addColorStop(1, '#2c1e48');
     ctx.fillStyle = artGrad;
     roundRect(ctx, contentL, artY, contentW, artH, 12);
     ctx.fill();
@@ -158,7 +158,7 @@ export async function createCardTexture(): Promise<CanvasTexture> {
     const textBoxH = HEIGHT - pad - frameW - textBoxY - 20;
 
     // Text box background
-    ctx.fillStyle = '#1a1f3d';
+    ctx.fillStyle = '#271a3d';
     roundRect(ctx, contentL, textBoxY, contentW, textBoxH, 12);
     ctx.fill();
 
@@ -185,11 +185,11 @@ export async function createCardTexture(): Promise<CanvasTexture> {
     ctx.letterSpacing = '8px';
     ctx.fillText('SOFTWARE ENGINEER', WIDTH / 2, textBoxY + textBoxH * 0.25 + 2);
 
-    // "ANTIPODEAN SYSTEMS" — lower half
+    // "ANTIPODEAN SYSTEMS OÜ" — lower half
     ctx.fillStyle = '#a08545';
     ctx.font = "400 36px 'DM Sans', sans-serif";
     ctx.letterSpacing = '6px';
-    ctx.fillText('ANTIPODEAN SYSTEMS', WIDTH / 2, textBoxY + textBoxH * 0.72);
+    ctx.fillText('ANTIPODEAN SYSTEMS OÜ', WIDTH / 2, textBoxY + textBoxH * 0.72);
 
     const texture = new CanvasTexture(canvas as unknown as HTMLCanvasElement);
     texture.colorSpace = SRGBColorSpace;
