@@ -18,11 +18,19 @@ if (view.name === 'landing') {
         const edition = editions[Math.floor(Math.random() * editions.length)];
 
         (async () => {
-            await import('./three/webgpu-polyfill');
-            const { BusinessCard } = await import('./three/BusinessCard');
-            const scene = new BusinessCard(container);
-            await scene.init();
-            scene.setEdition(edition);
+            try {
+                await import('./three/webgpu-polyfill');
+                const { BusinessCard } = await import('./three/BusinessCard');
+                const scene = new BusinessCard(container);
+                await scene.init();
+                scene.setEdition(edition);
+            } catch (e) {
+                // Temporary: show error on screen for mobile debugging
+                const err = document.createElement('pre');
+                err.style.cssText = 'color:red;font-size:12px;padding:8px;white-space:pre-wrap;word-break:break-all;';
+                err.textContent = `Card error: ${e}\n\n${(e as Error).stack || ''}`;
+                container.appendChild(err);
+            }
         })();
     }
 }
