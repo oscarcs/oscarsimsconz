@@ -39,7 +39,10 @@ if (view.name === 'landing') {
                 await scene.init();
                 dbg('setEdition...');
                 scene.setEdition(edition);
-                dbg('OK!');
+                const w = cardContainer.clientWidth;
+                const h = cardContainer.clientHeight;
+                const canvas = cardContainer.querySelector('canvas');
+                dbg(`OK! container=${w}x${h} canvas=${canvas?.width}x${canvas?.height} children=${cardContainer.children.length}`);
             } catch (e) {
                 dbg(`ERR: ${e}\n${(e as Error).stack || ''}`);
             }
