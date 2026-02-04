@@ -115,15 +115,15 @@ export const animatedField = /*#__PURE__*/ Fn(
 
         const field = float(1.0)
             .add(
-                cos(length(field_part1).div(19.483))
+                cos(length(field_part1).div(24.71))
                     .add(
-                        sin(length(field_part2).div(33.155)).mul(
-                            cos(field_part2.y.div(15.73)),
+                        sin(length(field_part2).div(41.38)).mul(
+                            cos(field_part2.y.div(19.87)),
                         ),
                     )
                     .add(
-                        cos(length(field_part3).div(27.193)).mul(
-                            sin(field_part3.x.div(21.92)),
+                        cos(length(field_part3).div(33.62)).mul(
+                            sin(field_part3.x.div(27.14)),
                         ),
                     ),
             )

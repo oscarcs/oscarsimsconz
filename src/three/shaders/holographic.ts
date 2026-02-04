@@ -1,11 +1,8 @@
-// Holographic shader — ported from Balatro's holo.fs (LOVE2D GLSL).
-// Rainbow HSL hue rotation driven by animated noise field + cross-hatch grid.
-//
-// Original uniforms: holo.x = time/scroll, holo.y = mouse
-// We map: timeUniform -> holo.x (and `time`), mouseUniform -> holo.y
+// Holographic shader — rainbow HSL hue rotation with honeycomb pattern.
+// Inspired by Balatro's holo.fs.
 
 import {
-    vec4, float, uv, sin, cos, abs, max,
+    vec2, vec4, float, uv, sin, cos, abs, max, length, fract,
     texture, Fn, If,
 } from 'three/tsl';
 import type { ShaderNodeObject, UniformNode, Node } from 'three/tsl';
@@ -14,53 +11,68 @@ import { HSLFn, RGBFn, animatedField } from './common';
 
 export function createHolographicShader(
     cardTexture: Texture,
-    timeUniform: ShaderNodeObject<UniformNode<number>>,
-    mouseUniform: ShaderNodeObject<UniformNode<number>>,
+    tilt: ShaderNodeObject<UniformNode<number>>,
+    roll: ShaderNodeObject<UniformNode<number>>,
 ): ShaderNodeObject<Node> {
     return Fn(() => {
         const texUv = uv();
         const tex = texture(cardTexture, texUv).toVar();
-        const t = float(timeUniform);
-        const mouse = float(mouseUniform);
+        const t = float(tilt);
+        const r = float(roll);
 
-        // Convert original to HSL directly — no blue pre-blend, which
-        // was desaturating gold elements and making hue rotation invisible.
         const hsl = HSLFn(tex).toVar();
 
-        // Animated field (scale=250, time offset by mouse)
-        const fieldTime = mouse.mul(7.221).add(t);
-        const field = animatedField(texUv, fieldTime, float(250.0));
+        // Animated noise field
+        const field = animatedField(texUv, r.mul(7.221).add(t), float(250.0));
 
-        // Cosine wave driven by time and field
-        const res = float(0.5).add(
-            float(0.5).mul(
-                cos(t.mul(2.612).add(field.sub(0.5).mul(3.14))),
-            ),
+        // Cosine wave driven by tilt and field
+        const wave = float(0.5).add(
+            float(0.5).mul(cos(t.mul(2.612).add(field.sub(0.5).mul(3.14)))),
         );
 
-        // Cross-hatch grid pattern
-        const gridsize = float(0.79);
-        const gx = texUv.x.mul(gridsize).mul(20.0);
-        const gy = texUv.y.mul(gridsize).mul(45.0);
-        const line1 = max(float(7.0).mul(abs(cos(gx))).sub(6.0), 0.0);
-        const line2 = max(float(7.0).mul(cos(gy.add(gx))).sub(6.0), 0.0);
-        const line3 = max(float(7.0).mul(cos(gy.sub(gx))).sub(6.0), 0.0);
-        const fac = float(0.5).mul(max(line1, max(line2, line3)));
+        // Honeycomb pattern — two candidate hex grids, pick nearest center
+        const hexScale = float(5.0);
+        const px = texUv.x.mul(hexScale);
+        const py = texUv.y.mul(hexScale).mul(3.5 / 2.5);
+        const sqrt3 = float(1.732);
 
-        // Rotate hue by field + grid, ensure enough saturation for
-        // the rainbow shift to be visible on all card elements
-        hsl.x.assign(hsl.x.add(res).add(fac));
-        hsl.y.assign(max(hsl.y, float(0.35)).mul(1.3));
-        hsl.z.assign(hsl.z.mul(0.6).add(0.4));
+        // Grid A
+        const ax = fract(px).sub(0.5);
+        const ay = fract(py.div(sqrt3)).mul(sqrt3).sub(sqrt3.mul(0.5));
+        const da = ax.mul(ax).add(ay.mul(ay));
 
-        // Uniform blend strength
-        const delta = float(0.22);
+        // Grid B (offset by half cell in both axes)
+        const bx = fract(px.add(0.5)).sub(0.5);
+        const by = fract(py.add(sqrt3.mul(0.5)).div(sqrt3)).mul(sqrt3).sub(sqrt3.mul(0.5));
+        const db = bx.mul(bx).add(by.mul(by));
 
-        // Blend between original and holo-shifted color
+        // Pick closest hex center
+        const hcX = float(0).toVar();
+        const hcY = float(0).toVar();
+        If(da.lessThan(db), () => {
+            hcX.assign(ax);
+            hcY.assign(ay);
+        }).Else(() => {
+            hcX.assign(bx);
+            hcY.assign(by);
+        });
+
+        const hexAx = abs(hcX);
+        const hexAy = abs(hcY);
+        const hexDist = max(hexAx.mul(0.866).add(hexAy.mul(0.5)), hexAy);
+        const edge = max(float(1.0).sub(abs(hexDist.sub(0.4)).mul(7.0)), 0.0);
+        const grid = edge.mul(edge);
+
+        // Rotate hue, boost saturation for visible rainbow
+        hsl.x.assign(hsl.x.add(wave).add(grid));
+        hsl.y.assign(max(hsl.y, float(0.35)).mul(1.2));
+        hsl.z.assign(hsl.z.mul(0.7).add(0.3));
+
+        // Blend original with holo-shifted color
+        const blendStrength = float(0.15);
         const holoRgb = RGBFn(hsl).mul(vec4(0.9, 0.8, 1.2, tex.a));
-        const result = tex.mul(float(1.0).sub(delta)).add(holoRgb.mul(delta)).toVar();
+        const result = tex.mul(float(1.0).sub(blendStrength)).add(holoRgb.mul(blendStrength)).toVar();
 
-        // Alpha handling: reduce alpha for semi-transparent pixels
         If(result.a.lessThan(0.7), () => {
             result.a.assign(result.a.div(3.0));
         });

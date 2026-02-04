@@ -26,8 +26,8 @@ export class PlayingCard {
     private resizeObserver!: ResizeObserver;
     private rafId = 0;
     private container: HTMLElement;
-    private tiltUniform = uniform(0);
-    private mouseXUniform = uniform(0);
+    private tilt = uniform(0);
+    private roll = uniform(0);
     private disposed = false;
 
     constructor(container: HTMLElement) {
@@ -58,17 +58,17 @@ export class PlayingCard {
 
         const foilMat = new MeshBasicNodeMaterial();
         foilMat.transparent = true;
-        foilMat.colorNode = createFoilShader(cardTex, this.tiltUniform, this.mouseXUniform);
+        foilMat.colorNode = createFoilShader(cardTex, this.tilt, this.roll);
         this.materials.set('foil', foilMat);
 
         const holoMat = new MeshBasicNodeMaterial();
         holoMat.transparent = true;
-        holoMat.colorNode = createHolographicShader(cardTex, this.tiltUniform, this.mouseXUniform);
+        holoMat.colorNode = createHolographicShader(cardTex, this.tilt, this.roll);
         this.materials.set('holographic', holoMat);
 
         const polyMat = new MeshBasicNodeMaterial();
         polyMat.transparent = true;
-        polyMat.colorNode = createPolychromeShader(cardTex, this.tiltUniform, this.mouseXUniform);
+        polyMat.colorNode = createPolychromeShader(cardTex, this.tilt, this.roll);
         this.materials.set('polychrome', polyMat);
 
         // Default to holographic
@@ -112,11 +112,9 @@ export class PlayingCard {
         const now = performance.now() / 1000;
         this.mouseTracker.update(now);
 
-        // Drive shader directly from card rotation — shimmer follows tilt
-        // like a real holographic card catching light at different angles.
-        // Scale up so small tilts produce visible shader variation.
-        this.tiltUniform.value = this.mesh.rotation.y * 4;
-        this.mouseXUniform.value = this.mesh.rotation.x * 60;
+        // Drive shader from card rotation, scaled up for visible variation
+        this.tilt.value = this.mesh.rotation.y * 4;
+        this.roll.value = this.mesh.rotation.x * 60;
 
         this.renderer.render(this.scene, this.camera);
     };
