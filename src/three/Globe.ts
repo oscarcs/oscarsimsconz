@@ -15,6 +15,9 @@ import { generateEarthSDF } from './shaders/globe/sdf';
 import { createGlobeShader } from './shaders/globe/shader';
 
 export class Globe {
+    // Start with the Atlantic/Africa-Europe side facing camera instead of the central Pacific.
+    private static readonly INITIAL_ROT_Z = Math.PI;
+
     private renderer!: WebGPURenderer;
     private camera!: OrthographicCamera;
     private scene!: Scene;
@@ -133,7 +136,7 @@ export class Globe {
         this.rafId = requestAnimationFrame(this.animate);
 
         const now = performance.now() / 1000;
-        this.rotZ.value = now * 0.15;
+        this.rotZ.value = Globe.INITIAL_ROT_Z + (now * 0.15);
         this.rotX.value = 0.0;
 
         // Sub-pixel jitter for TAA
