@@ -1,18 +1,42 @@
 {
-  "_vendor-C6WxKkic.js": {
-    "file": "static/vendor-C6WxKkic.js",
+  "_three-Bnc2aoLW.js": {
+    "file": "static/three-Bnc2aoLW.js",
+    "name": "three"
+  },
+  "_vendor-BQGqIg5h.js": {
+    "file": "static/vendor-BQGqIg5h.js",
     "name": "vendor"
   },
   "src/client.tsx": {
-    "file": "static/client-Bxjk-Xkm.js",
+    "file": "static/client-BR3LhFdK.js",
     "name": "client",
     "src": "src/client.tsx",
     "isEntry": true,
     "imports": [
-      "_vendor-C6WxKkic.js"
+      "_vendor-BQGqIg5h.js"
+    ],
+    "dynamicImports": [
+      "src/three/webgpu-polyfill.ts",
+      "src/three/BusinessCard.ts"
     ],
     "css": [
-      "static/client-ez9OgYTy.css"
+      "static/client-B5uVGARN.css"
     ]
+  },
+  "src/three/BusinessCard.ts": {
+    "file": "static/BusinessCard-DwLu9VK1.js",
+    "name": "BusinessCard",
+    "src": "src/three/BusinessCard.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_three-Bnc2aoLW.js",
+      "_vendor-BQGqIg5h.js"
+    ]
+  },
+  "src/three/webgpu-polyfill.ts": {
+    "file": "static/webgpu-polyfill-CPvA3pWr.js",
+    "name": "webgpu-polyfill",
+    "src": "src/three/webgpu-polyfill.ts",
+    "isDynamicEntry": true
   }
 }

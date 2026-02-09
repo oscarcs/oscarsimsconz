@@ -54,6 +54,7 @@ export default defineConfig(({ mode }) => {
             ],
             server: {
                 host: true,
+                cors: true,
             },
             ssr: {
                 external: ['react', 'react-dom', 'three', 'qrcode'],

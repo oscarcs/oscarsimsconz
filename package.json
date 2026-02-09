@@ -2,7 +2,7 @@
     "name": "oscarsimsconz",
     "type": "module",
     "scripts": {
-        "dev": "echo \"export default false\" > ./src/config/is_prod.ts && vite",
+        "dev": "echo \"export default false\" > ./src/config/is_prod.ts && vite & vite --mode client & wait",
         "client": "vite --mode client",
         "build": "$npm_execpath run version && vite build --mode client && cp -f ./dist/.vite/manifest.json ./src/lib/manifest.json && vite build",
         "preview": "wrangler pages dev dist",

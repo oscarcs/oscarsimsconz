@@ -7,7 +7,6 @@ import { Nav } from './Nav';
 import { Footer } from './Footer';
 
 const POSTS_PER_PAGE = 5;
-const EDITIONS = ['foil', 'holographic', 'polychrome'] as const;
 
 export default function Landing() {
     const posts = getAllPosts();
@@ -15,13 +14,6 @@ export default function Landing() {
     const paginated = totalPages > 1;
 
     const [page, setPage] = useState(0);
-    const [edition, setEdition] = useState<string>('foil');
-
-    function pickEdition(ed: string, direction: number) {
-        setEdition(ed);
-        const container = document.getElementById('card-container');
-        container?.dispatchEvent(new CustomEvent('edition-change', { detail: { edition: ed, direction } }));
-    }
 
     const visiblePosts = paginated
         ? posts.slice(page * POSTS_PER_PAGE, (page + 1) * POSTS_PER_PAGE)
@@ -31,43 +23,18 @@ export default function Landing() {
         <div className="w-full min-h-screen flex flex-col bg-[#0a0a0a] text-white">
             <Nav />
 
-            {/* Main two-column layout */}
-            <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8 px-6 pt-2 pb-8 mx-auto w-full max-w-5xl">
-                {/* Card column */}
-                <div className="flex flex-col items-center justify-center w-full lg:w-1/2">
+            {/* Two-column on desktop, stacked on mobile */}
+            <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-center justify-center gap-8 px-6 pt-2 pb-8 mx-auto w-full max-w-6xl">
+                {/* Globe */}
+                <div className="flex items-center justify-center w-full lg:w-1/2">
                     <div
-                        id="card-container"
-                        className="card-canvas-container w-full max-w-sm aspect-[2.5/3.5] relative"
+                        id="globe-container"
+                        className="w-full max-w-lg aspect-square"
                     />
-                    <div className="flex items-center gap-2 mt-4 text-sm text-gray-500">
-                        <button
-                            onClick={() => {
-                                const i = (EDITIONS.indexOf(edition as typeof EDITIONS[number]) - 1 + EDITIONS.length) % EDITIONS.length;
-                                pickEdition(EDITIONS[i], -1);
-                            }}
-                            className="p-1 rounded hover:bg-white/10 transition-colors"
-                            aria-label="Previous edition"
-                        >
-                            <ChevronLeft className="h-4 w-4" />
-                        </button>
-                        <span className="text-xs tabular-nums">
-                            {EDITIONS.indexOf(edition as typeof EDITIONS[number]) + 1}/{EDITIONS.length}
-                        </span>
-                        <button
-                            onClick={() => {
-                                const i = (EDITIONS.indexOf(edition as typeof EDITIONS[number]) + 1) % EDITIONS.length;
-                                pickEdition(EDITIONS[i], 1);
-                            }}
-                            className="p-1 rounded hover:bg-white/10 transition-colors"
-                            aria-label="Next edition"
-                        >
-                            <ChevronRight className="h-4 w-4" />
-                        </button>
-                    </div>
                 </div>
 
-                {/* Posts column */}
-                <div className="flex flex-col lg:w-1/2 w-full lg:justify-start lg:py-12">
+                {/* Posts */}
+                <div className="flex flex-col w-full lg:w-1/2">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Posts & Projects</h2>
                         {paginated && (
