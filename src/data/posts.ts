@@ -10,6 +10,33 @@ export interface Post {
 
 export const posts: Post[] = [
     {
+        name: "LLM Agent experiments",
+        slug: "local-coding-agent",
+        shortDescription: "Building programming agents from first principles",
+        dateDescription: "April 2026",
+        body: `
+            <p>I think it's important to have a more first-principles intuition for what LLM-assisted tools are actually doing. Stripped back to the essentials,
+            all of these tools are some variation on the same loop: construct a prompt, send it to a model, read the completion, and decide what to do next.
+            The interesting part is not magic, but how much structure you wrap around that loop.</p>
+
+            <p>The project starts with a deliberately minimal script, <code>complete.js</code>, which is little more than a completion REPL. From there it steps up
+            to <code>chat.js</code>, where conversation state is introduced, then to simple tool-using agents like <code>weather.js</code> and <code>assistant.js</code>.
+            Each stage adds a small amount of machinery, but also makes the behaviour much easier to reason about.</p>
+
+            <p>The final version, <code>programmer.js</code>, is a more complete local programming agent. It has explicit prompt formatting, parsing for tool calls,
+            a control loop that executes those tools, and a workspace-scoped set of programming utilities for reading files, writing files, listing directories,
+            and running shell commands. The overall architecture is still intentionally simple enough that you can understand it end-to-end without much ceremony.</p>
+
+            <p>I think there is a real benefit in building systems like this from scratch, even if you later end up using more polished tooling. It forces you to see
+            where the boundaries really are between the model, the harness, and the external environment, and makes a lot of current "agent" discussion feel much less mystical.</p>
+
+            <p>The code is designed to run against a local completion endpoint such as LM Studio with a Gemma 4 model. On my machine, <code>gemma-4-E4B</code> has been
+            capable enough for simple programming tasks while remaining practical to run locally.</p>
+        `,
+        link: "https://github.com/oscarcs/local-coding-agent",
+        linkText: "View on GitHub"
+    },
+    {
         name: "viz",
         slug: "viz",
         shortDescription: "Experiments in computational geometry and urban visualisation using deck.gl",
