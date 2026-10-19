@@ -15,7 +15,6 @@
         ],
         "jsx": "react-jsx",
         "jsxImportSource": "react",
-        "baseUrl": ".",
         "paths": {
             "@/*": [
                 "./src/*"
@@ -26,6 +25,7 @@
             "three/tsl": [
                 "./node_modules/@types/three/src/Three.TSL.d.ts"
             ]
-        }
+        },
+        "skipLibCheck": true
     }
 }

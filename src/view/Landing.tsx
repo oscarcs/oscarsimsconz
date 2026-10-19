@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { getAllPosts } from '../data/posts';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Nav } from './Nav';
 import { Footer } from './Footer';
 
@@ -20,29 +20,31 @@ export default function Landing() {
         : posts;
 
     return (
-        <div className="w-full min-h-screen flex flex-col bg-[#0a0a0a] text-white">
+        <div className="site-shell">
             <Nav />
 
             {/* Two-column on desktop, stacked on mobile */}
-            <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-center justify-center gap-8 px-6 pt-2 pb-8 mx-auto w-full max-w-6xl">
+            <main className="landing-layout site-width">
                 {/* Globe */}
                 <div className="flex items-center justify-center w-full lg:w-1/2">
                     <div
                         id="globe-container"
-                        className="w-full max-w-lg aspect-square"
+                        className="globe-canvas"
+                        role="img"
+                        aria-label="Rotating bronze and silver globe"
                     />
                 </div>
 
                 {/* Posts */}
                 <div className="flex flex-col w-full lg:w-1/2">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Posts & Projects</h2>
+                        <h2 className="section-label">Posts & Projects</h2>
                         {paginated && (
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <div className="flex items-center gap-2 text-sm text-muted">
                                 <button
                                     onClick={() => setPage(p => Math.max(0, p - 1))}
                                     disabled={page === 0}
-                                    className="p-1 rounded hover:bg-white/10 transition-colors disabled:opacity-25 disabled:cursor-default"
+                                    className="pagination-button"
                                     aria-label="Previous page"
                                 >
                                     <ChevronLeft className="h-4 w-4" />
@@ -53,7 +55,7 @@ export default function Landing() {
                                 <button
                                     onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
                                     disabled={page === totalPages - 1}
-                                    className="p-1 rounded hover:bg-white/10 transition-colors disabled:opacity-25 disabled:cursor-default"
+                                    className="pagination-button"
                                     aria-label="Next page"
                                 >
                                     <ChevronRight className="h-4 w-4" />
@@ -61,23 +63,24 @@ export default function Landing() {
                             </div>
                         )}
                     </div>
-                    <div className="flex flex-col gap-3">
+                    <div className="project-list">
                         {visiblePosts.map((post) => (
                             <a
                                 key={post.slug}
                                 href={`/project/${post.slug}`}
-                                className="group block border border-white/10 rounded-lg p-4 hover:border-white/25 transition-colors"
+                                className="project-row group"
                             >
-                                <div className="flex justify-between items-start gap-4">
-                                    <span className="font-medium group-hover:text-white text-gray-200">{post.name}</span>
-                                    <span className="text-xs text-gray-500 shrink-0">{post.dateDescription}</span>
+                                <div className="flex justify-between items-baseline gap-4">
+                                    <span className="project-title">{post.name}</span>
+                                    <span className="project-date">{post.dateDescription}</span>
                                 </div>
-                                <p className="text-sm text-gray-500 mt-1">{post.shortDescription}</p>
+                                <p className="project-description">{post.shortDescription}</p>
+                                <ArrowUpRight className="project-arrow" aria-hidden="true" />
                             </a>
                         ))}
                     </div>
                 </div>
-            </div>
+            </main>
 
             <Footer />
         </div>

@@ -11,29 +11,29 @@ type PostProps = {
 
 export default function PostPage({ post }: PostProps) {
     return (
-        <div className="w-full min-h-screen flex flex-col bg-[#0a0a0a] text-white">
+        <div className="site-shell">
             <Nav />
 
             {/* Content */}
-            <div className="flex-1 flex flex-col px-6 py-8 mx-auto w-full max-w-2xl">
+            <div className="article-layout flex-1 flex flex-col px-6 py-8 mx-auto w-full max-w-2xl">
                 <div className="mb-4">
-                    <a href="/" className="text-sm text-gray-500 hover:text-white transition-colors">
+                    <a href="/" className="text-sm text-muted hover:text-copper transition-colors">
                         &larr; Back to home
                     </a>
                 </div>
 
-                <div className="border border-white/10 rounded-lg p-6 sm:p-8 mb-8">
-                    <h1 className="text-3xl sm:text-4xl font-black tracking-tight">{post.name}</h1>
-                    <p className="text-sm text-gray-500 mt-2">{post.dateDescription}</p>
+                <div className="article-heading border-b border-white/10 pb-8 mb-8">
+                    <h1 className="font-display text-4xl sm:text-5xl font-medium tracking-tight">{post.name}</h1>
+                    <p className="text-sm text-muted mt-2">{post.dateDescription}</p>
 
                     <div className="mt-4">
-                        <Link href={post.link} className="text-sm text-gray-400 hover:text-white transition-colors">
+                        <Link href={post.link} className="text-sm text-copper hover:text-ivory transition-colors">
                             {post.linkText}
                         </Link>
                     </div>
                 </div>
 
-                <section className="prose prose-sm prose-invert max-w-none prose-p:text-gray-300 prose-headings:text-white prose-strong:text-white prose-a:text-gray-400 prose-a:hover:text-white prose-ul:text-gray-300 prose-li:text-gray-300">
+                <section className="prose prose-sm prose-invert max-w-none prose-p:text-gray-300 prose-headings:text-ivory prose-strong:text-ivory prose-a:text-copper prose-a:hover:text-ivory prose-ul:text-gray-300 prose-li:text-gray-300">
                     <div dangerouslySetInnerHTML={{ __html: post.body }} />
                 </section>
             </div>

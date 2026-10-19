@@ -12,7 +12,7 @@ export function Link({ href, children, className = '' }: LinkProps) {
   return (
     <a
       href={href}
-      className={`inline-flex items-center hover:opacity-80 hover:underline ${className}`}
+      className={`inline-flex items-center gap-1 transition-colors ${className}`}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
     >

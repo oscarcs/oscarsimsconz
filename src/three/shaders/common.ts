@@ -4,11 +4,11 @@
 import {
     Fn, float, vec2, vec4, mod, min, max, sin, cos, length, If,
 } from 'three/tsl';
-import type { ShaderNodeObject, Node } from 'three/tsl';
+import type { Node } from 'three/webgpu';
 
 // HSL single-channel helper: converts one hue segment to RGB value
 export const hueFn = /*#__PURE__*/ Fn(
-    ([s_immutable, t_immutable, h_immutable]: ShaderNodeObject<Node>[]) => {
+    ([s_immutable, t_immutable, h_immutable]: [Node<'float'>, Node<'float'>, Node<'float'>]) => {
         const s = float(s_immutable);
         const t = float(t_immutable);
         const h = float(h_immutable);
@@ -29,7 +29,7 @@ export const hueFn = /*#__PURE__*/ Fn(
 );
 
 // HSL vec4(h,s,l,a) -> RGB vec4(r,g,b,a)
-export const RGBFn = /*#__PURE__*/ Fn(([c_immutable]: ShaderNodeObject<Node>[]) => {
+export const RGBFn = /*#__PURE__*/ Fn(([c_immutable]: [Node<'vec4'>]) => {
     const c = vec4(c_immutable);
     const result = vec4(c.z, c.z, c.z, c.a).toVar();
 
@@ -58,7 +58,7 @@ export const RGBFn = /*#__PURE__*/ Fn(([c_immutable]: ShaderNodeObject<Node>[]) 
 });
 
 // RGB vec4(r,g,b,a) -> HSL vec4(h,s,l,a)
-export const HSLFn = /*#__PURE__*/ Fn(([c_immutable]: ShaderNodeObject<Node>[]) => {
+export const HSLFn = /*#__PURE__*/ Fn(([c_immutable]: [Node<'vec4'>]) => {
     const c = vec4(c_immutable);
     const low = min(c.r, min(c.g, c.b));
     const high = max(c.r, max(c.g, c.b));
@@ -91,7 +91,7 @@ export const HSLFn = /*#__PURE__*/ Fn(([c_immutable]: ShaderNodeObject<Node>[]) 
 // Animated noise field shared by holo and polychrome shaders.
 // uvNode: 0-1 UV, tNode: time value, scaleNode: spatial scale factor
 export const animatedField = /*#__PURE__*/ Fn(
-    ([uvNode, tNode, scaleNode]: ShaderNodeObject<Node>[]) => {
+    ([uvNode, tNode, scaleNode]: [Node<'vec2'>, Node<'float'>, Node<'float'>]) => {
         const uv_scaled = vec2(uvNode).sub(0.5).mul(scaleNode);
 
         const field_part1 = uv_scaled.add(

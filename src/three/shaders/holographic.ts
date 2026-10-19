@@ -5,15 +5,15 @@ import {
     vec2, vec4, float, uv, sin, cos, abs, max, length, fract,
     texture, Fn, If,
 } from 'three/tsl';
-import type { ShaderNodeObject, UniformNode, Node } from 'three/tsl';
+import type { UniformNode, Node } from 'three/webgpu';
 import type { Texture } from 'three/webgpu';
 import { HSLFn, RGBFn, animatedField } from './common';
 
 export function createHolographicShader(
     cardTexture: Texture,
-    tilt: ShaderNodeObject<UniformNode<number>>,
-    roll: ShaderNodeObject<UniformNode<number>>,
-): ShaderNodeObject<Node> {
+    tilt: UniformNode<'float', number>,
+    roll: UniformNode<'float', number>,
+): Node<'vec4'> {
     return Fn(() => {
         const texUv = uv();
         const tex = texture(cardTexture, texUv).toVar();

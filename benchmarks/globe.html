@@ -1,0 +1,68 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Globe rendering benchmark</title>
+<style>body{background:#10100f;color:#eee9df;font:14px system-ui;margin:24px} #globe{width:504px;height:504px}canvas{width:100%;height:100%}pre{white-space:pre-wrap}</style></head>
+<body><h1>Globe rendering benchmark</h1><p>60 warm-up frames, 240 measured angles; GPU timings exclude presentation.</p><div id="globe"></div><pre id="results">Starting…</pre>
+<script type="module">
+import '/src/three/webgpu-polyfill.ts';
+const params = new URLSearchParams(location.search);
+const width = Number(params.get('size') || 504);
+const { Globe } = await import('/src/three/Globe.ts');
+const container = document.getElementById('globe');
+container.style.width = container.style.height = `${width}px`;
+const output = document.getElementById('results');
+const summary = values => {
+    const sorted = [...values].sort((a,b) => a-b);
+    return { mean: values.reduce((a,b)=>a+b,0)/values.length, median: sorted[Math.floor(sorted.length*.5)], p95: sorted[Math.floor(sorted.length*.95)] };
+};
+try {
+    // Development-only harness: access renderer internals without shipping
+    // profiling hooks or GPU timestamp queries in the production animation.
+    const globe = new Globe(container);
+    await globe.init();
+    await new Promise(requestAnimationFrame);
+    cancelAnimationFrame(globe.rafId);
+    globe.resizeObserver.disconnect();
+    globe.intersectionObserver.disconnect();
+    document.removeEventListener('visibilitychange', globe.restart);
+    globe.motionQuery.removeEventListener('change', globe.restart);
+    const renderer = globe.renderer;
+    renderer.setPixelRatio(Number(params.get('dpr') || 1));
+    globe.updateSize();
+    cancelAnimationFrame(globe.rafId);
+    const backend = renderer.backend;
+    if (!backend.isWebGPUBackend) throw new Error('This benchmark requires WebGPU GPU timestamp queries.');
+    const device = backend.device;
+    const timestamps = device.features.has('timestamp-query');
+    backend.trackTimestamp = timestamps;
+    const gpu = [], submit = [], completed = [], intervals = [];
+    let previous;
+    for (let i = -60; i < 240; i++) {
+        const now = await new Promise(requestAnimationFrame);
+        const interval = previous ? now - previous : 0;
+        previous = now;
+        // Identical angle coverage for both variants, including the dense grid views.
+        globe.angle = Math.PI + Math.max(0, i) / 240 * Math.PI * 2;
+        globe.lastTime = now;
+        const start = performance.now();
+        globe.animate(now);
+        cancelAnimationFrame(globe.rafId);
+        const submitted = performance.now() - start;
+        const elapsedGPU = timestamps ? await renderer.resolveTimestampsAsync('render') : null;
+        await device.queue.onSubmittedWorkDone();
+        if (i >= 0) {
+            if (elapsedGPU !== null) gpu.push(elapsedGPU);
+            submit.push(submitted); completed.push(performance.now()-start); intervals.push(interval);
+        }
+        if (i % 30 === 0) output.textContent = `Measuring supersampled: ${Math.max(0,i)}/240`;
+    }
+    const report = {
+        variant: 'supersampled', cssSize: width, devicePixelRatio, outputPixelRatio: renderer.getPixelRatio(),
+        canvas: [renderer.domElement.width, renderer.domElement.height], target: [globe.target.width, globe.target.height],
+        adapter: device.adapterInfo, samples: gpu.length, gpuMs: gpu.length ? summary(gpu) : null,
+        cpuSubmitMs: summary(submit), completionMs: summary(completed), frameIntervalMs: summary(intervals),
+    };
+    output.textContent = JSON.stringify(report, null, 2);
+    output.dataset.complete = 'true';
+    // Keep the final frame visible without consuming GPU time.
+} catch (error) { output.textContent = error.stack; output.dataset.complete = 'error'; }
+</script></body></html>

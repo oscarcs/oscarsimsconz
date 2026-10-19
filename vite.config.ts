@@ -1,25 +1,18 @@
 import build from '@hono/vite-cloudflare-pages';
 import devServer from '@hono/vite-dev-server';
 import adapter from '@hono/vite-dev-server/cloudflare';
-import basicSsl from '@vitejs/plugin-basic-ssl';
-import preserveDirectives from 'rollup-preserve-directives';
 import { defineConfig } from 'vite';
 import path from 'path';
 
 export default defineConfig(({ mode }) => {
     if (mode === 'client') {
         return {
-            plugins: [preserveDirectives()],
-            optimizeDeps: {
-                esbuildOptions: {
-                    target: 'esnext',
-                },
-            },
+            server: { host: '127.0.0.1', port: 5174, strictPort: true, cors: { origin: /^http:\/\/(localhost|127\.0\.0\.1):5173$/ } },
             build: {
                 target: 'esnext',
                 manifest: true,
                 assetsDir: 'static',
-                rollupOptions: {
+                rolldownOptions: {
                     input: './src/client.tsx',
                     output: {
                         entryFileNames: 'static/client-[hash].js',
@@ -36,7 +29,7 @@ export default defineConfig(({ mode }) => {
             },
             resolve: {
                 alias: {
-                    "@": path.resolve(__dirname, "./src"),
+                    "@": path.resolve(import.meta.dirname, "./src"),
                 },
             },
         }
@@ -44,8 +37,6 @@ export default defineConfig(({ mode }) => {
     else {
         return {
             plugins: [
-                preserveDirectives(),
-                basicSsl(),
                 build(),
                 devServer({
                     adapter,
@@ -53,15 +44,16 @@ export default defineConfig(({ mode }) => {
                 }),
             ],
             server: {
-                host: true,
-                cors: true,
+                host: '127.0.0.1',
+                port: 5173,
+                strictPort: true,
             },
             ssr: {
                 external: ['react', 'react-dom', 'three', 'qrcode'],
             },
             resolve: {
                 alias: {
-                    "@": path.resolve(__dirname, "./src"),
+                    "@": path.resolve(import.meta.dirname, "./src"),
                 },
             },
         }
